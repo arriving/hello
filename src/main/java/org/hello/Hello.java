@@ -1,4 +1,4 @@
-package org.arriving.hello;
+package org.hello;
 
 public class Hello {
 
