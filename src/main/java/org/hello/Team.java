@@ -1,4 +1,4 @@
-package com.arriving.hello;
+package org.hello;
 
 import java.util.ArrayList;
 import java.util.List;
