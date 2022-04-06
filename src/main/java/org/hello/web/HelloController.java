@@ -1,5 +1,6 @@
 package org.hello.web;
 
+import org.hello.util.MagicUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +25,7 @@ public class HelloController {
     public @ResponseBody
     ResponseEntity<List> listFiles(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getParameter("path");
-	    path = URLDecoder.decode(path, "UTF-8");
+	    path = MagicUtil.processPath(path);
 
         List<String> list = fileService.listFiles(path);
         return new ResponseEntity<List>(list, HttpStatus.OK);
@@ -35,6 +35,7 @@ public class HelloController {
     public @ResponseBody
     ResponseEntity<String> readContent(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getParameter("path");
+        path = MagicUtil.processPath(path);
 
         return new ResponseEntity<String>(fileService.readFileContent(path), HttpStatus.OK);
     }
