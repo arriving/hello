@@ -1,14 +1,16 @@
 package org.hello.service;
 
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
-public class ListFileServiceImpl implements ListFileService {
+public class FileServiceImpl implements FileService {
 
     @Override
     public List<String> listFiles(String path) {
@@ -17,7 +19,7 @@ public class ListFileServiceImpl implements ListFileService {
         try {
             String cmd = "ls " + path;
             System.out.println(cmd);
-            Process process = Runtime.getRuntime().exec(new String[] {"/bin/sh","-c", cmd});
+            Process process = Runtime.getRuntime().exec(new String[] {"/bin/sh", "-c", cmd});
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -36,6 +38,18 @@ public class ListFileServiceImpl implements ListFileService {
             }
         }
         return list;
+    }
+
+    @Override
+    public String readFileContent(String path) {
+        String content = null;
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(path));
+            content = new String(bytes);
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+        return content;
     }
 }
 
