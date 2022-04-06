@@ -1,8 +1,0 @@
-org/hello/web/HelloController.class
-org/hello/Configure.class
-org/hello/service/FileServiceImpl.class
-org/hello/service/FileService.class
-org/hello/Person.class
-org/hello/HelloApplication.class
-org/hello/Hello.class
-org/hello/Team.class
