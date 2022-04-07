@@ -19,7 +19,8 @@ public class FileServiceImpl implements FileService {
         try {
             String cmd = "ls " + path;
             System.out.println(cmd);
-            Process process = Runtime.getRuntime().exec(new String[] {"/bin/sh", "-c", cmd});
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec(new String[] {"/bin/sh", "-c", cmd});
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
             while ((line = br.readLine()) != null) {
