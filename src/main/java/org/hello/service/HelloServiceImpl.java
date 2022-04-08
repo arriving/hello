@@ -1,5 +1,7 @@
 package org.hello.service;
 
+import org.hello.logger.HelloLogger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -10,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FileServiceImpl implements FileService {
+public class HelloServiceImpl implements HelloService {
+
+    @Autowired
+    HelloLogger logger;
 
     @Override
     public List<String> listFiles(String path) {
@@ -18,7 +23,7 @@ public class FileServiceImpl implements FileService {
         BufferedReader br = null;
         try {
             String cmd = "ls " + path;
-            System.out.println(cmd);
+            logger.info(cmd);
             Runtime runtime = Runtime.getRuntime();
             Process process = runtime.exec(new String[] {"/bin/sh", "-c", cmd});
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -27,9 +32,9 @@ public class FileServiceImpl implements FileService {
                 list.add(line);
             }
             int exitVal = process.waitFor();
-            System.out.println("Process exitValue: " + exitVal);
+            logger.info("Process exitValue: " + exitVal);
         } catch (Exception ei) {
-            System.out.println("Exception: " + ei.getMessage());
+            logger.error("Exception: " + ei.getMessage());
         } finally {
             if (br != null) {
                 try {
@@ -45,13 +50,20 @@ public class FileServiceImpl implements FileService {
     public String readFileContent(String path) {
         String content = null;
         try {
+            doSomething(path);
             byte[] bytes = Files.readAllBytes(Paths.get(path));
             content = new String(bytes);
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
+            logger.error("Exception: " + e.getMessage());
         }
         return content;
     }
+
+    private void doSomething(String str) {
+        // do something
+        logger.info("doSomething: " + str);
+    }
+
 }
 
 
