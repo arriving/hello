@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hello.service.FileService;
+import org.hello.service.HelloService;
 
 @Controller
 public class HelloController {
 
     @Autowired
-    FileService fileService;
+    HelloService helloService;
 
     @RequestMapping(value = "/hello/ls", method = RequestMethod.GET)
     public @ResponseBody
@@ -32,7 +31,7 @@ public class HelloController {
         String path = request.getParameter("path");
 	    path = MagicUtil.processPath(path);
 
-        List<String> list = fileService.listFiles(path);
+        List<String> list = helloService.listFiles(path);
         return new ResponseEntity<List>(list, HttpStatus.OK);
     }
 
@@ -42,7 +41,7 @@ public class HelloController {
         String path = request.getParameter("path");
         path = MagicUtil.processPath(path);
 
-        return new ResponseEntity<String>(fileService.readFileContent(path), HttpStatus.OK);
+        return new ResponseEntity<String>(helloService.readFileContent(path), HttpStatus.OK);
     }
 }
 
