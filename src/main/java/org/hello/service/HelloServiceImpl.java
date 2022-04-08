@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +19,42 @@ public class HelloServiceImpl implements HelloService {
 
     @Override
     public List<String> listFiles(String path) {
+        String cmd = "ls " + path;
+        logger.info("cmd: " + cmd);
+        List<String> list = exec(new String[] {"/bin/sh", "-c", cmd});
+        logger.info("list size:" + list.size());
+        return list;
+    }
+
+    @Override
+    public String readFileContent(String path) {
+        String content = null;
+        try {
+            byte[] bytes = readAllBytes(Paths.get(path));
+            content = new String(bytes);
+        } catch (Exception e) {
+            logger.error("Exception: " + e.getMessage());
+        }
+        return content;
+    }
+
+    private List<String> exec(String[] cmdArray) {
         List<String> list = new ArrayList<>();
         BufferedReader br = null;
         try {
-            String cmd = "ls " + path;
-            logger.info(cmd);
-            Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(new String[] {"/bin/sh", "-c", cmd});
-            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                list.add(line);
-            }
-            int exitVal = process.waitFor();
+        /*
+        Process process = exec(new String[] {"/bin/sh", "-c", cmd});
+        br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            list.add(line);
+        }
+        int exitVal = process.waitFor();
+        */
+            int exitVal = 0;
             logger.info("Process exitValue: " + exitVal);
-        } catch (Exception ei) {
-            logger.error("Exception: " + ei.getMessage());
+        } catch (Exception e) {
+            logger.error("Exception: " + e.getMessage());
         } finally {
             if (br != null) {
                 try {
@@ -46,22 +66,9 @@ public class HelloServiceImpl implements HelloService {
         return list;
     }
 
-    @Override
-    public String readFileContent(String path) {
-        String content = null;
-        try {
-            doSomething(path);
-            byte[] bytes = Files.readAllBytes(Paths.get(path));
-            content = new String(bytes);
-        } catch (Exception e) {
-            logger.error("Exception: " + e.getMessage());
-        }
-        return content;
-    }
-
-    private void doSomething(String str) {
-        // do something
-        logger.info("doSomething: " + str);
+    private byte[] readAllBytes(Path path) {
+       // return Files.readAllBytes(path);
+        return null;
     }
 
 }
