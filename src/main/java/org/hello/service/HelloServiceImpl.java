@@ -30,7 +30,7 @@ public class HelloServiceImpl implements HelloService {
     public String readFileContent(String path) {
         String content = null;
         try {
-            byte[] bytes = readAllBytes(Paths.get(path));
+            byte[] bytes = readAllBytes(path);
             content = new String(bytes);
         } catch (Exception e) {
             logger.error("Exception: " + e.getMessage());
@@ -66,8 +66,8 @@ public class HelloServiceImpl implements HelloService {
         return list;
     }
 
-    private byte[] readAllBytes(Path path) {
-       // return Files.readAllBytes(path);
+    private byte[] readAllBytes(String path) {
+       // return Files.readAllBytes(Paths.get(path));
         return null;
     }
 
